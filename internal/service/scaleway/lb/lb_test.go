@@ -17,6 +17,7 @@ import (
 	"github.com/scaleway/scaleway-sdk-go/scw"
 	"go.uber.org/mock/gomock"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"sigs.k8s.io/cluster-api/api/v1beta1"
 )
 
 const (
@@ -64,6 +65,12 @@ func TestService_Reconcile(t *testing.T) {
 			fields: fields{
 				Cluster: &scope.Cluster{
 					ScalewayCluster: &v1alpha1.ScalewayCluster{
+						ObjectMeta: v1.ObjectMeta{
+							Name:      "cluster",
+							Namespace: "default",
+						},
+					},
+					Cluster: &v1beta1.Cluster{
 						ObjectMeta: v1.ObjectMeta{
 							Name:      "cluster",
 							Namespace: "default",
@@ -149,6 +156,12 @@ func TestService_Reconcile(t *testing.T) {
 							Network: &infrav1.NetworkStatus{
 								PrivateNetworkID: scw.StringPtr(privateNetworkID),
 							},
+						},
+					},
+					Cluster: &v1beta1.Cluster{
+						ObjectMeta: v1.ObjectMeta{
+							Name:      "cluster",
+							Namespace: "default",
 						},
 					},
 				},

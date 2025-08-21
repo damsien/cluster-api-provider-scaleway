@@ -168,7 +168,6 @@ spec:
   network:
     controlPlaneLoadBalancer:
       type: LB-S
-      port: 443
       zone: fr-par-1
       ip: 42.42.42.42 # optional
       # private: true
@@ -177,8 +176,6 @@ spec:
 ```
 
 - The `type` field can be updated to migrate the Load Balancer to another type.
-- The `port` field specifies the port of the Load Balancer frontend that exposes the kube-apiserver(s).
-  This field is immutable.
 - The `zone` field specifies where the Load Balancer will be created. Must be in the same region
   as the `ScalewayCluster` region. This defaults to the first availability zone of the region.
   This field is immutable.
@@ -191,6 +188,26 @@ spec:
 > [!CAUTION]
 > When `private` is set to `true`, make sure your management cluster has network access
 > to the Private Network where the workload cluster will be created.
+
+The main Load Balancer's port can be set at the cluster creation in the `Cluster` object.
+
+Here is an example of the main Load Balancer port configuration:
+
+```yaml
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: Cluster
+metadata:
+  name: my-cluster
+  namespace: default
+spec:
+  ...
+  clusterNetwork:
+    apiServerPort: 443
+  ...
+```
+
+- The `apiServerPort` field specifies the port of the Load Balancer frontend that exposes the kube-apiserver(s).
+  This field is immutable.
 
 #### Extra Load Balancers
 
