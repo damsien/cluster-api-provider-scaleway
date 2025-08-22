@@ -151,6 +151,28 @@ For more information about private DNS, please refer to the [Understanding Scale
 When creating a `ScalewayCluster`, a "main" Load Balancer is always created.
 It is also possible to specify "extra" Load Balancers to achieve regional redundancy.
 
+#### Front API server port
+
+The kube-apiserver Load Balancer's front port can be set at the cluster creation in the `Cluster` object.
+
+Here is an example of the main Load Balancer port configuration:
+
+```yaml
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: Cluster
+metadata:
+  name: my-cluster
+  namespace: default
+spec:
+  ...
+  clusterNetwork:
+    apiServerPort: 443
+  ...
+```
+
+- The `apiServerPort` field specifies the port of the Load Balancer frontend that exposes the kube-apiserver(s).
+  This field should not be changed after the creation of the cluster.
+
 #### Main Load Balancer
 
 The main Load Balancer is always created by default, it is not possible to disable it.
@@ -188,26 +210,6 @@ spec:
 > [!CAUTION]
 > When `private` is set to `true`, make sure your management cluster has network access
 > to the Private Network where the workload cluster will be created.
-
-The main Load Balancer's port can be set at the cluster creation in the `Cluster` object.
-
-Here is an example of the main Load Balancer port configuration:
-
-```yaml
-apiVersion: cluster.x-k8s.io/v1beta1
-kind: Cluster
-metadata:
-  name: my-cluster
-  namespace: default
-spec:
-  ...
-  clusterNetwork:
-    apiServerPort: 443
-  ...
-```
-
-- The `apiServerPort` field specifies the port of the Load Balancer frontend that exposes the kube-apiserver(s).
-  This field is immutable.
 
 #### Extra Load Balancers
 
